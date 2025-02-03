@@ -18,6 +18,13 @@ namespace rst
         Depth = 2
     };
 
+    enum class AAMethod
+    {
+        off,
+        MSAAx4,
+        MSAAx8
+    };
+
     inline Buffers operator|(Buffers a, Buffers b)
     {
         return Buffers((int)a | (int)b);
@@ -79,9 +86,15 @@ namespace rst
 
         void rasterize_triangle(const Triangle& t);
 
+        void MSAA(int& Multiple, Vector2f MinBBox, Vector2f MaxBBox, const Triangle& t);
+
+        float GetPixelDepth(float x, float y, const Triangle& t);
+
         // VERTEX SHADER -> MVP -> Clipping -> /.W -> VIEWPORT -> DRAWLINE/DRAWTRI -> FRAGSHADER
 
     private:
+        Vector3f BackgroundColor = { 0,0,0 };
+
         Eigen::Matrix4f model;
         Eigen::Matrix4f view;
         Eigen::Matrix4f projection;
@@ -91,10 +104,12 @@ namespace rst
         std::map<int, std::vector<Eigen::Vector3f>> col_buf;
 
         std::vector<Eigen::Vector3f> frame_buf;
+        std::vector<Eigen::Vector3f> FrameSampleBuffer;
 
         std::vector<float> depth_buf;
+        std::vector<float> DepthSampleBuffer;
         int get_index(int x, int y);
-
+        AAMethod AA = AAMethod::MSAAx4;
         int width, height;
 
         int next_id = 0;

@@ -6,7 +6,7 @@
 
 constexpr double MY_PI = 3.1415926;
 const Vector3f RotateAxis =  Vector3f(1,1,1);
-Eigen::Matrix4f RotationAboutAxis(float Angle, Vector3f Axis);
+Eigen::Matrix4f GetRotationAboutAxisMatrix(float Angle, Vector3f Axis);
 Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
 {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
@@ -37,7 +37,7 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
         0, 0, 1, 0,
         0, 0, 0, 1;
 
-    M_rot2 << RotationAboutAxis(rotation_angle, RotateAxis);
+    M_rot2 << GetRotationAboutAxisMatrix(rotation_angle, RotateAxis);
 
     model = M_rot2;
     return model;
@@ -45,7 +45,7 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
 /*
 * 罗德里格斯任意轴旋转
 */
-Eigen::Matrix4f RotationAboutAxis(float Angle, Vector3f Axis)
+Eigen::Matrix4f GetRotationAboutAxisMatrix(float Angle, Vector3f Axis)
 {
     Eigen::Matrix4f  I, N;
     Eigen::Vector4f n;                          
